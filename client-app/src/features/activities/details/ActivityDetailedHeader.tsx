@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import {Button, Header, Item, Segment, Image} from 'semantic-ui-react'
 import {Activity} from "../../../app/models/activity";
 
@@ -53,3 +54,5 @@ export default observer (function ActivityDetailedHeader({activity}: Props) {
         </Segment.Group>
     )
 })
+
+

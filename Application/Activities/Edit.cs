@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Core;
 using AutoMapper;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -11,12 +13,20 @@ namespace Application.Activities
 {
     public class Edit
     {
-        public class command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public Activity Activity { get; set; }
         }
 
-        public class Handler : IRequestHandler<command>
+        public class CommandValidation : AbstractValidator<Command>
+        {
+            public CommandValidation()
+            {
+                RuleFor( x=> x.Activity).SetValidator(new ActivityValidator());
+            }
+        }
+
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext context;
             private readonly IMapper mapper;
@@ -27,16 +37,19 @@ namespace Application.Activities
                 this.mapper = mapper;
             }
 
-            public async Task<Unit> Handle(command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var activity = await context.Activities.FindAsync(request.Activity.Id);
+
+                if (activity == null) return null;
     
                 mapper.Map(request.Activity, activity);
 
-                await context.SaveChangesAsync();
+                var result = await context.SaveChangesAsync() > 0 ;
 
-                return Unit.Value;
+                if (!result) return Result<Unit>.Failure("Failed to update Activity");
 
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }
