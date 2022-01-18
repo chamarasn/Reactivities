@@ -42,8 +42,10 @@ export default observer(function ActivityForm(){
 
     useEffect(() => {
         if (id){
-            loadActivity(id).then(
-            activity => SetActivity(activity!))
+            loadActivity(id)
+            .then(
+                activity => SetActivity(activity!)
+            )
         }else{
             SetActivity({
                 id: '',

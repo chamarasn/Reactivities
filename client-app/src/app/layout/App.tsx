@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container } from 'semantic-ui-react';
 import NavBar from './NavBar';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
@@ -11,22 +11,55 @@ import TestErrors from '../../features/errors/TestError';
 import { ToastContainer } from 'react-toastify';
 import NotFound from '../../features/errors/NotFound';
 import ServerError from '../../features/errors/ServerError';
+import LoginForm from '../../features/users/LoginForm';
+import { useStore } from '../stores/store';
+import LoadingComponent from './loadinComponent';
+import ModalContainer from '../common/modals/ModalContainer';
 
 function App() {
+  const {commonStore, userStore} = useStore();
+
+  useEffect(() => {
+    if (commonStore.token){
+      debugger;
+      userStore.getUser().finally(()=> commonStore.setApploaded())
+    }else{
+      commonStore.setApploaded();
+    }
+  },[commonStore, userStore])
+
+  if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
   return (
     <>
+      <ModalContainer />
       <Routes >
         <Route path='/' element={<HomePage />}></Route>
         <Route path={'activities/*'} element={<LoadActivities /> } />
+        <Route path={'/login'} element={<LoadLogin /> } />
         <Route path={'/*'} element={<OtherRouters />}></Route>
       </Routes>
     </>
   );
 }
 
+function LoadLogin(){
+  return (
+    <>
+      <ToastContainer position='bottom-right' hideProgressBar/>
+      <NavBar/>
+      <Container style={{marginTop: '7em'}}>
+          {
+          <Routes >
+              <Route path='/'  element={<LoginForm />} ></Route>
+            </Routes> 
+          }
+      </Container>
+    </>
+  )
+}
+
 function LoadActivities(){
   const location = useLocation();
-
   return (
     <>
       <ToastContainer position='bottom-right' hideProgressBar/>
@@ -36,9 +69,11 @@ function LoadActivities(){
           <Routes >
               <Route path='/'  element={<ActivityDashboard />} ></Route>
               <Route path=':id' element={<ActivityDetails />} ></Route>
-              <Route   path='/activityEdit' element={<ActivityForm />}>
+              <Route path='/activityEdit' element={<ActivityForm />}>
                 <Route key={location.key}  path=':id' element={<ActivityForm />} ></Route> 
               </Route>
+              <Route path={'/login'} element={<LoginForm /> } />
+
             </Routes> 
           }
       </Container>
