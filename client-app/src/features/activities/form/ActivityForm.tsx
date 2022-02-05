@@ -12,24 +12,16 @@ import MyTextArea from "../../../app/common/form/MyTextArea";
 import MySelectInput from "../../../app/common/form/MySelectInput";
 import { categoryOptions } from "../../../app/common/options/categoryOptions";
 import MyDateInput from "../../../app/common/form/MyDateInput";
-import { Activity } from "../../../app/models/activity";
+import { Activity, ActivityFormValues } from "../../../app/models/activity";
 
 export default observer(function ActivityForm(){
     const navigate = useNavigate();
     const {activityStore} = useStore();
-    const {submitting, createActivity, editActivity, 
+    const {createActivity, editActivity, 
         loadActivity, loadingInitial} = activityStore;
     const {id} = useParams<{id: string}>();
 
-    const [activity, SetActivity] = useState<Activity>({
-        id: '',
-        title: '',
-        date: null,
-        description: '',
-        category: '',
-        city: '',
-        venue: ''       
-    });
+    const [activity, SetActivity] = useState<ActivityFormValues>(new ActivityFormValues());
 
     const validationSchema = Yup.object({
        title: Yup.string().required('The Activity title is required'),
@@ -44,7 +36,7 @@ export default observer(function ActivityForm(){
         if (id){
             loadActivity(id)
             .then(
-                activity => SetActivity(activity!)
+                activity => SetActivity(new ActivityFormValues(activity))
             )
         }else{
             SetActivity({
@@ -60,13 +52,13 @@ export default observer(function ActivityForm(){
 
     }, [id, loadActivity])
 
-    function handleFormSubmit(activity: Activity){
-        if (activity.id.length === 0 ){
+    function handleFormSubmit(activity: ActivityFormValues){
+        if (!activity.id){
             let newActivity = {
                 ...activity,
                 id: uuid()
             };
-            createActivity(newActivity).then(()=>
+            createActivity(newActivity as Activity).then(()=>
                 navigate(`/activities/${newActivity.id}`)
             )
         }else{
@@ -103,7 +95,7 @@ export default observer(function ActivityForm(){
                         <MyTextInput placeholder='Venue' name='venue'/>
                         <Button
                             disabled={isSubmitting || !dirty || !isValid}
-                            loading={submitting} 
+                            loading={isSubmitting} 
                             floated='right' positive type='submit' content='Submit'   />
                         <Button floated='right' positive type='button' content='Cancel' />
                     </Form>
