@@ -15,6 +15,7 @@ import LoginForm from '../../features/users/LoginForm';
 import { useStore } from '../stores/store';
 import LoadingComponent from './loadinComponent';
 import ModalContainer from '../common/modals/ModalContainer';
+import ProfilePage from '../../features/profiles/PrifilePage';
 
 function App() {
   const {commonStore, userStore} = useStore();
@@ -91,6 +92,7 @@ function OtherRouters(){
       <Container style={{marginTop: '7em'}}>
           {
             <Routes location={location}>
+              <Route path='/profiles/:username' element={<ProfilePage />} ></Route>
               <Route path='/errors' element={<TestErrors />} ></Route>
               <Route path='/server-error' element={<ServerError />} ></Route>
               <Route path='/*' element={<NotFound />} ></Route>
