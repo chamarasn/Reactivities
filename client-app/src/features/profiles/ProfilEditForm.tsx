@@ -3,7 +3,6 @@ import React from "react";
 import { Button, Form, Segment } from "semantic-ui-react";
 import MyTextArea from "../../app/common/form/MyTextArea";
 import MyTextInput from "../../app/common/form/MyTextInput";
-import { Profile } from "../../app/models/profile";
 import * as Yup from "yup";
 import { useStore } from "../../app/stores/store";
 

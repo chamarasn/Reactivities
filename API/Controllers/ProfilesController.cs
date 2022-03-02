@@ -16,5 +16,7 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(command));
         }
+
+        //[HttpPost("{username}/follow")]
     }
 }

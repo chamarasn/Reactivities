@@ -32,7 +32,7 @@ namespace Application.Profiles
             {
                 var user = await _context.Users
                     .ProjectTo<Profile>(_mapper.ConfigurationProvider)
-                    .SingleOrDefaultAsync(x =>x.Username == request.Username);
+                    .SingleOrDefaultAsync(x => x.Username == request.Username);
 
                 if (user == null) return null;
                 
