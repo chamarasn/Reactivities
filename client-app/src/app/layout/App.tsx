@@ -22,7 +22,6 @@ function App() {
 
   useEffect(() => {
     if (commonStore.token){
-      debugger;
       userStore.getUser().finally(()=> commonStore.setApploaded())
     }else{
       commonStore.setApploaded();
