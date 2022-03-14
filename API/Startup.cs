@@ -49,6 +49,8 @@ namespace API
             services.AddApplicationServices(_config);
             services.AddIdentityService(_config);
 
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); // for progres
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +68,9 @@ namespace API
 
             app.UseRouting();
 
+            app.UseDefaultFiles(); //look wwwrootfolder, index.html
+            app.UseStaticFiles(); 
+
             app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
@@ -75,6 +80,7 @@ namespace API
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chat");
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

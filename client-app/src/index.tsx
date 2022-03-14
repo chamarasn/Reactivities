@@ -10,6 +10,7 @@ import reportWebVitals from './reportWebVitals';
 import { store, StoreContext } from './app/stores/store';
 import { createBrowserHistory } from "history";
 import { BrowserRouter, Router } from 'react-router-dom';
+import ScrollToTop from './app/layout/ScrollToTop';
 
 export const history  = createBrowserHistory();
 
@@ -37,6 +38,7 @@ ReactDOM.render(
   <React.StrictMode>
     <StoreContext.Provider value={store}>
       <BrowserRouter>
+        <ScrollToTop/>
         <App />
       </BrowserRouter>
     </StoreContext.Provider>
