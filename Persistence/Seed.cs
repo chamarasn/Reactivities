@@ -256,6 +256,27 @@ namespace Persistence
                 };
 
                 await context.Activities.AddRangeAsync(activities);
+
+                var customerGroups = new List<CustomerGroup>
+                {
+                   new CustomerGroup{ Id = 1, Name = "customerGrpName1"},
+                   new CustomerGroup{ Id = 2, Name = "customerGrpName2"},
+                   new CustomerGroup{ Id = 3, Name = "customerGrpName3"},
+                   new CustomerGroup{ Id = 4, Name = "customerGrpName4"},
+                   new CustomerGroup{ Id = 5, Name = "customerGrpName5"},
+                   new CustomerGroup{ Id = 6, Name = "customerGrpName6"},
+                   new CustomerGroup{ Id = 7, Name = "customerGrpName7"},
+                };
+                await context.CustomerGroups.AddRangeAsync(customerGroups);
+
+                context.Proposals.Add(new Proposal
+                {
+                    Name = "name",
+                    Description = "",
+                    Date = DateTime.Now,
+                    CustomerGroupId = 1
+                });
+
                 await context.SaveChangesAsync();
             }
         }

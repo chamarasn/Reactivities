@@ -1,6 +1,7 @@
 
 using Application.Activities;
 using Application.Comments;
+using Application.Proposal;
 using AutoMapper;
 using Domain;
 
@@ -43,6 +44,23 @@ namespace Application.Core
                 .ForMember(d => d.Category, o => o.MapFrom(s => s.Activity.Category))
                 .ForMember(d => d.HostUsername, o => o.MapFrom(s => 
                     s.Activity.Attendees.FirstOrDefault(x=> x.IsHost).AppUser.UserName));
+
+            CreateMap<CustomerGroup, CustomerGroupDto>();
+            CreateMap<CustomerGroupDto, CustomerGroup>();
+
+            CreateMap<Facility, FacilityDto>();
+
+            CreateMap<Domain.Proposal, ProposalDto>()
+                .ForMember(d => d.Facilities, o => o.MapFrom(s => s.Facilitys))
+                .ForMember(d => d.CustomerGroup, o => o.MapFrom(s => s.CustomerGroup));
+
+            CreateMap<ProposalDto, Domain.Proposal>()
+                .ForMember(d => d.Facilitys, o => o.MapFrom(s => s.Facilities))
+                .ForMember(d => d.CustomerGroupId, o => o.MapFrom(s => s.CustomerGroup.Id))
+                .ForMember(x => x.CustomerGroup, opt => opt.Ignore());
+
+            CreateMap<Domain.Proposal, Domain.Proposal>();
+
         }
     }
 }

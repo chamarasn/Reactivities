@@ -19,6 +19,9 @@ namespace Persistence
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<UserFollowing> UserFollowings { get; set; }
+        public DbSet<CustomerGroup> CustomerGroups { get; set; }
+        public DbSet<Proposal> Proposals { get; set; }
+        public DbSet<Facility> Facilities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -55,6 +58,11 @@ namespace Persistence
                     .HasForeignKey(o => o.TargetId)
                     .OnDelete(DeleteBehavior.Cascade);                    
             });
+
+            builder.Entity<Proposal>()
+                .HasOne(a=>a.CustomerGroup)
+                .WithMany(x => x.Proposals)
+                .OnDelete(DeleteBehavior.Cascade);
             
         }
     }

@@ -49,7 +49,7 @@ namespace API
             services.AddApplicationServices(_config);
             services.AddIdentityService(_config);
 
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); // for progres
+            //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); // for progres
 
         }
 
